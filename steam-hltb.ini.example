@@ -1,0 +1,16 @@
+# steam-hltb 設定ファイル / settings
+# ------------------------------------------------------------------
+# 使い方 / How to use:
+#   下の 2 行の = の右側に、あなたの値を貼り付けて保存してください。
+#   Paste your values after each "=" below, then save this file.
+#
+#   このファイルは steam-hltb（実行ファイル）と同じフォルダに置いてください。
+#   Keep this file in the same folder as the steam-hltb program.
+#
+# 値の取得先 / Where to get the values:
+#   STEAM_API_KEY … https://steamcommunity.com/dev/apikey （32文字）
+#   STEAM_ID      … あなたの SteamID64（17桁の数字）/ your 17-digit SteamID64
+# ------------------------------------------------------------------
+
+STEAM_API_KEY=
+STEAM_ID=

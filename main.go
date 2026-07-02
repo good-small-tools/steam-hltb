@@ -167,12 +167,13 @@ func httpDisplayAddr(addr string) string {
 }
 
 func parseFlags() config {
-	// フラグの既定値を読む前に .env を環境変数へ取り込む（既存の環境変数は上書きしない）。
-	loadDotEnv(".env")
+	// フラグの既定値を読む前に設定ファイル（steam-hltb.ini など）を環境変数へ
+	// 取り込む（既存の環境変数は上書きしない）。
+	loadLocalConfig()
 
 	var cfg config
-	flag.StringVar(&cfg.apiKey, "key", os.Getenv("STEAM_API_KEY"), "Steam Web API キー（環境変数 STEAM_API_KEY / .env でも可）")
-	flag.StringVar(&cfg.steamID, "steamid", os.Getenv("STEAM_ID"), "SteamID64（17桁。環境変数 STEAM_ID / .env でも可）")
+	flag.StringVar(&cfg.apiKey, "key", os.Getenv("STEAM_API_KEY"), "Steam Web API キー（steam-hltb.ini / .env / 環境変数 STEAM_API_KEY でも可）")
+	flag.StringVar(&cfg.steamID, "steamid", os.Getenv("STEAM_ID"), "SteamID64（17桁。steam-hltb.ini / .env / 環境変数 STEAM_ID でも可）")
 	flag.StringVar(&cfg.outPath, "out", "report.html", "出力する HTML ファイル")
 	flag.StringVar(&cfg.cachePath, "cache", "hltb_cache.json", "HLTB 照合結果のキャッシュファイル")
 	flag.BoolVar(&cfg.noCache, "no-cache", false, "キャッシュを使わず毎回 HLTB に問い合わせる")
@@ -188,7 +189,9 @@ func parseFlags() config {
 
 	if cfg.apiKey == "" || cfg.steamID == "" {
 		fmt.Fprintln(os.Stderr, "エラー: API キーと SteamID が必要です。")
-		fmt.Fprintln(os.Stderr, "  -key / -steamid で渡すか、環境変数 STEAM_API_KEY / STEAM_ID、または .env ファイルに記載してください。")
+		fmt.Fprintln(os.Stderr, "  この実行ファイルと同じフォルダにある steam-hltb.ini を開き、")
+		fmt.Fprintln(os.Stderr, "  STEAM_API_KEY と STEAM_ID の値を記入して保存してください。")
+		fmt.Fprintln(os.Stderr, "  （-key / -steamid や環境変数 STEAM_API_KEY / STEAM_ID でも指定できます）")
 		fmt.Fprintln(os.Stderr, "\n使い方:")
 		flag.PrintDefaults()
 		os.Exit(2)
@@ -196,8 +199,36 @@ func parseFlags() config {
 	return cfg
 }
 
-// loadDotEnv は KEY=VALUE 形式の .env を読み、未設定の環境変数だけを設定する。
-// 行頭 # はコメント、値の前後の引用符は除去する。ファイルが無ければ何もしない。
+// loadLocalConfig は設定ファイルを環境変数へ取り込む。カレントディレクトリと
+// 実行ファイルのあるフォルダの両方を探すので、エクスプローラーからのダブル
+// クリック（作業ディレクトリが実行ファイル位置と異なる場合）でも読み込める。
+// 優先順位: カレント > 実行ファイル位置、各フォルダ内では steam-hltb.ini > .env。
+// loadDotEnv は「未設定のキーだけ」設定するため、先に見つかった値が勝つ。
+func loadLocalConfig() {
+	names := []string{"steam-hltb.ini", "steam-hltb.txt", ".env"}
+	var dirs []string
+	if wd, err := os.Getwd(); err == nil {
+		dirs = append(dirs, wd)
+	}
+	if exe, err := os.Executable(); err == nil {
+		dirs = append(dirs, filepath.Dir(exe))
+	}
+	seen := map[string]bool{}
+	for _, d := range dirs {
+		for _, n := range names {
+			p := filepath.Join(d, n)
+			if seen[p] {
+				continue
+			}
+			seen[p] = true
+			loadDotEnv(p)
+		}
+	}
+}
+
+// loadDotEnv は KEY=VALUE 形式の設定ファイル（.env / .ini）を読み、未設定の
+// 環境変数だけを設定する。行頭 # と ; はコメント、値の前後の引用符は除去する。
+// ファイルが無ければ何もしない。
 func loadDotEnv(path string) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -208,7 +239,7 @@ func loadDotEnv(path string) {
 	sc := bufio.NewScanner(f)
 	for sc.Scan() {
 		line := strings.TrimSpace(sc.Text())
-		if line == "" || strings.HasPrefix(line, "#") {
+		if line == "" || strings.HasPrefix(line, "#") || strings.HasPrefix(line, ";") {
 			continue
 		}
 		line = strings.TrimPrefix(line, "export ")

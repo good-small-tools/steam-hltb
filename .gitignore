@@ -3,8 +3,10 @@
 steam-hltb
 *.exe
 
-# 秘密情報（絶対にコミットしない）
+# 秘密情報（絶対にコミットしない。テンプレートは *.example を参照）
 .env
+steam-hltb.ini
+steam-hltb.txt
 
 # 実行時に生成されるもの
 report.html

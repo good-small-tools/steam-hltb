@@ -15,15 +15,20 @@ playtime into a single **HTML table**.
 
 ## Download
 
-Grab the ready-to-run file for your OS from the
-[**Releases**](../../releases) page — no setup required:
+Grab the ZIP for your OS from the [**Releases**](../../releases) page:
 
 | OS | File to download |
 |---|---|
-| Windows (64-bit) | `steam-hltb-windows-amd64.exe` |
-| macOS (Apple Silicon, M1+) | `steam-hltb-macos-arm64` |
-| macOS (Intel) | `steam-hltb-macos-amd64` |
-| Linux (64-bit) | `steam-hltb-linux-amd64` |
+| Windows (64-bit) | `steam-hltb-windows-amd64.zip` |
+| macOS (Apple Silicon, M1+) | `steam-hltb-macos-arm64.zip` |
+| macOS (Intel) | `steam-hltb-macos-amd64.zip` |
+| Linux (64-bit) | `steam-hltb-linux-amd64.zip` |
+
+Each ZIP already contains everything you need — no separate setup:
+
+- the program (`steam-hltb` / `steam-hltb.exe`)
+- **`steam-hltb.ini`** — a settings file you open in Notepad/TextEdit and fill in
+- a short quick-start (`README-first.txt`)
 
 `SHA256SUMS.txt` on the same page lists checksums if you want to verify your download.
 
@@ -57,24 +62,26 @@ Grab the ready-to-run file for your OS from the
 - For a custom URL (`/id/yourname`), paste the URL into a site like
   [steamid.io](https://steamid.io) to look up your `steamID64`.
 
-## Setting your key and ID (the `.env` file)
+## Setting your key and ID (`steam-hltb.ini`)
 
-The easiest way is to put a small text file named `.env` **in the same folder as
-the program**, containing your key and ID:
+The ZIP includes a settings file named **`steam-hltb.ini`**. Open it in any text
+editor (Notepad, TextEdit, …) and paste your values after the `=` signs:
 
 ```ini
 STEAM_API_KEY=your-32-character-key
 STEAM_ID=7656119XXXXXXXXXX
 ```
 
-You can copy the included `.env.example` to `.env` and fill in your values.
+Save it, keep it in the same folder as the program, and you're done. That's the
+only setup step.
 
-> `.env` is ignored by git and never published. Your API key is a
-> password-grade secret — never share it.
+> Keep `steam-hltb.ini` private — your API key is a password-grade secret. Never
+> share it or commit it anywhere.
 
-(Advanced users can also pass `-key` / `-steamid` on the command line, or set
-the `STEAM_API_KEY` / `STEAM_ID` environment variables. Priority is:
-command-line flags > environment variables > `.env`.)
+(Advanced users: a `.env` file with the same `KEY=VALUE` format also works, and
+you can pass `-key` / `-steamid` on the command line or set the
+`STEAM_API_KEY` / `STEAM_ID` environment variables. Priority is:
+command-line flags > environment variables > `steam-hltb.ini` / `.env`.)
 
 ## How to use (two modes)
 
@@ -82,15 +89,15 @@ command-line flags > environment variables > `.env`.)
 
 **No command line needed:**
 
-1. Put your `.env` file (with your key and SteamID) in the **same folder** as
-   the downloaded program (e.g. `steam-hltb-windows-amd64.exe` — you can rename
-   it to something shorter like `steam-hltb.exe` if you like).
-2. **Double-click the program** in Explorer.
-3. A window opens and shows the progress. When it finishes, `report.html` is
+1. **Unzip** the downloaded file to any folder.
+2. Open **`steam-hltb.ini`** in that folder, fill in your key and SteamID, and save.
+3. **Double-click `steam-hltb.exe`** (Windows) — or the `steam-hltb` program on
+   macOS/Linux — in that same folder.
+4. A window opens and shows the progress. When it finishes, `report.html` is
    created in that folder and **opens in your browser automatically**.
 
-That's all — nothing to type. (Double-clicking can't pass options, so the `.env`
-file is how the program finds your key and SteamID.)
+That's all — nothing to type. (Double-clicking can't pass options, so the
+`steam-hltb.ini` file is how the program finds your key and SteamID.)
 
 The first run queries your whole library against HLTB, so it can take anywhere
 from tens of seconds to a few minutes depending on how many games you own

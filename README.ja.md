@@ -14,15 +14,20 @@
 
 ## ダウンロード
 
-お使いの OS 用のファイルを [**Releases**](../../releases) ページから入手してください
-（セットアップ不要です）:
+お使いの OS 用の ZIP を [**Releases**](../../releases) ページから入手してください:
 
 | OS | ダウンロードするファイル |
 |---|---|
-| Windows（64bit） | `steam-hltb-windows-amd64.exe` |
-| macOS（Apple Silicon・M1以降） | `steam-hltb-macos-arm64` |
-| macOS（Intel） | `steam-hltb-macos-amd64` |
-| Linux（64bit） | `steam-hltb-linux-amd64` |
+| Windows（64bit） | `steam-hltb-windows-amd64.zip` |
+| macOS（Apple Silicon・M1以降） | `steam-hltb-macos-arm64.zip` |
+| macOS（Intel） | `steam-hltb-macos-amd64.zip` |
+| Linux（64bit） | `steam-hltb-linux-amd64.zip` |
+
+ZIP には必要なものが一式入っているので、別途の準備は不要です:
+
+- 実行ファイル（`steam-hltb` / `steam-hltb.exe`）
+- **`steam-hltb.ini`** … メモ帳などで開いて記入する設定ファイル
+- かんたん手順書（`README-first.txt`）
 
 検証したい場合は、同じページの `SHA256SUMS.txt` にチェックサムがあります。
 
@@ -54,24 +59,23 @@
 - プロフィール URL が `https://steamcommunity.com/profiles/7656119XXXXXXXXXX/` なら、その数字が SteamID64 です。
 - カスタム URL（`/id/yourname`）の場合は、[steamid.io](https://steamid.io) などに URL を貼ると `steamID64` が分かります。
 
-## キーと ID の設定（`.env` ファイル）
+## キーと ID の設定（`steam-hltb.ini`）
 
-いちばん簡単なのは、`.env` という名前の小さなテキストファイルを
-**プログラムと同じフォルダ**に置き、キーと ID を書いておく方法です:
+ZIP には **`steam-hltb.ini`** という設定ファイルが入っています。メモ帳などの
+テキストエディタで開き、`=` の右側にあなたの値を貼り付けてください:
 
 ```ini
 STEAM_API_KEY=あなたの32文字のキー
 STEAM_ID=7656119XXXXXXXXXX
 ```
 
-同梱の `.env.example` を `.env` にコピーして、値を埋めるだけでもOKです。
+保存して、プログラムと同じフォルダに置いておくだけで準備完了です。設定はこれだけです。
 
-> `.env` は git の管理対象外（公開されません）。API キーはパスワード級の秘密情報なので、
-> 絶対に他人に渡さないでください。
+> `steam-hltb.ini` は他人に渡さないでください。API キーはパスワード級の秘密情報です。
 
-（上級者向け: コマンドラインで `-key` / `-steamid` を渡したり、環境変数
-`STEAM_API_KEY` / `STEAM_ID` を設定することもできます。優先順位は
-コマンド引数 > 環境変数 > `.env` です。）
+（上級者向け: 同じ `KEY=VALUE` 形式の `.env` ファイルも使えます。コマンドラインで
+`-key` / `-steamid` を渡したり、環境変数 `STEAM_API_KEY` / `STEAM_ID` を設定する
+こともできます。優先順位は コマンド引数 > 環境変数 > `steam-hltb.ini` / `.env` です。）
 
 ## 使い方（2 つのモード）
 
@@ -79,15 +83,15 @@ STEAM_ID=7656119XXXXXXXXXX
 
 **コマンド入力は不要です:**
 
-1. キーと SteamID を書いた `.env` ファイルを、ダウンロードしたプログラム
-   （例: `steam-hltb-windows-amd64.exe`。`steam-hltb.exe` など短い名前に
-   変更してもOK）と **同じフォルダ**に置きます。
-2. エクスプローラーで **プログラムをダブルクリック**します。
-3. ウィンドウが開いて進捗が表示されます。完了すると同じフォルダに
+1. ダウンロードした ZIP を任意のフォルダに **展開（解凍）** します。
+2. そのフォルダの **`steam-hltb.ini`** を開き、キーと SteamID を記入して保存します。
+3. 同じフォルダの **`steam-hltb.exe`（Windows）**、または `steam-hltb`（macOS/Linux）を
+   **ダブルクリック**します。
+4. ウィンドウが開いて進捗が表示されます。完了すると同じフォルダに
    `report.html` が作られ、**自動でブラウザで開きます**。
 
 これだけです。入力するコマンドはありません。
-（ダブルクリックではオプションを渡せないため、`.env` ファイルでキーと SteamID を読み取ります。）
+（ダブルクリックではオプションを渡せないため、`steam-hltb.ini` でキーと SteamID を読み取ります。）
 
 初回はライブラリ全件を HLTB に問い合わせるため、本数に応じて数十秒〜数分かかります
 （負荷軽減のためリクエスト間隔を空けています）。2 回目以降はキャッシュにより高速です。
