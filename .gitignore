@@ -1,0 +1,20 @@
+# ビルド成果物（バイナリはリポジトリに入れず GitHub Releases で配布する）
+/steam-hltb
+steam-hltb
+*.exe
+
+# 秘密情報（絶対にコミットしない）
+.env
+
+# 実行時に生成されるもの
+report.html
+hltb_cache.json
+
+# スクショ用に再生成できる中間生成物（公開する成果物は sample.png）
+sample.html
+
+# 開発メモ（ローカル専用・公開しない）
+CLAUDE.md
+
+# OS
+.DS_Store
