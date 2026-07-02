@@ -1,0 +1,48 @@
+name: release
+
+# バージョンタグ（例: v1.0.1）を push すると、全OS向けバイナリを
+# 自動ビルドして GitHub Releases に添付する。
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write # Release の作成・アセット添付に必要
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Test
+        run: go test -short ./...
+
+      - name: Build (all platforms)
+        run: |
+          mkdir -p dist
+          LDFLAGS="-s -w"
+          build() { # $1=GOOS $2=GOARCH $3=output
+            echo "building $3"
+            GOOS=$1 GOARCH=$2 go build -trimpath -ldflags="$LDFLAGS" -o "dist/$3" .
+          }
+          build windows amd64 steam-hltb-windows-amd64.exe
+          build linux   amd64 steam-hltb-linux-amd64
+          build darwin  amd64 steam-hltb-macos-amd64
+          build darwin  arm64 steam-hltb-macos-arm64
+
+      - name: Checksums
+        run: (cd dist && sha256sum * > SHA256SUMS.txt && cat SHA256SUMS.txt)
+
+      - name: Create release and upload assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
