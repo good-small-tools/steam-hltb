@@ -17,8 +17,14 @@
 お使いの OS 用のファイルを [**Releases**](../../releases) ページから入手してください
 （セットアップ不要です）:
 
-- **Windows:** `steam-hltb.exe`
-- **macOS / Linux:** `steam-hltb`
+| OS | ダウンロードするファイル |
+|---|---|
+| Windows（64bit） | `steam-hltb-windows-amd64.exe` |
+| macOS（Apple Silicon・M1以降） | `steam-hltb-macos-arm64` |
+| macOS（Intel） | `steam-hltb-macos-amd64` |
+| Linux（64bit） | `steam-hltb-linux-amd64` |
+
+検証したい場合は、同じページの `SHA256SUMS.txt` にチェックサムがあります。
 
 > Windows では、初回起動時に青い「Windows によって PC が保護されました」
 > （SmartScreen）が出ることがあります。無料・未署名のツールではよくあることなので、
@@ -73,9 +79,10 @@ STEAM_ID=7656119XXXXXXXXXX
 
 **コマンド入力は不要です:**
 
-1. キーと SteamID を書いた `.env` ファイルを、`steam-hltb.exe` と
-   **同じフォルダ**に置きます。
-2. エクスプローラーで **`steam-hltb.exe` をダブルクリック**します。
+1. キーと SteamID を書いた `.env` ファイルを、ダウンロードしたプログラム
+   （例: `steam-hltb-windows-amd64.exe`。`steam-hltb.exe` など短い名前に
+   変更してもOK）と **同じフォルダ**に置きます。
+2. エクスプローラーで **プログラムをダブルクリック**します。
 3. ウィンドウが開いて進捗が表示されます。完了すると同じフォルダに
    `report.html` が作られ、**自動でブラウザで開きます**。
 

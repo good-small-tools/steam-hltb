@@ -18,8 +18,14 @@ playtime into a single **HTML table**.
 Grab the ready-to-run file for your OS from the
 [**Releases**](../../releases) page — no setup required:
 
-- **Windows:** `steam-hltb.exe`
-- **macOS / Linux:** `steam-hltb`
+| OS | File to download |
+|---|---|
+| Windows (64-bit) | `steam-hltb-windows-amd64.exe` |
+| macOS (Apple Silicon, M1+) | `steam-hltb-macos-arm64` |
+| macOS (Intel) | `steam-hltb-macos-amd64` |
+| Linux (64-bit) | `steam-hltb-linux-amd64` |
+
+`SHA256SUMS.txt` on the same page lists checksums if you want to verify your download.
 
 > On Windows, the first time you run it you may see a blue
 > "Windows protected your PC" (SmartScreen) box. This is normal for free,
@@ -77,8 +83,9 @@ command-line flags > environment variables > `.env`.)
 **No command line needed:**
 
 1. Put your `.env` file (with your key and SteamID) in the **same folder** as
-   `steam-hltb.exe`.
-2. **Double-click `steam-hltb.exe`** in Explorer.
+   the downloaded program (e.g. `steam-hltb-windows-amd64.exe` — you can rename
+   it to something shorter like `steam-hltb.exe` if you like).
+2. **Double-click the program** in Explorer.
 3. A window opens and shows the progress. When it finishes, `report.html` is
    created in that folder and **opens in your browser automatically**.
 
